@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # First attempt at a parser.
-# Operates on test.miscell.
 
 import string
 letters=list(string.ascii_uppercase)
