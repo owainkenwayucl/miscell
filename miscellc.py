@@ -33,8 +33,6 @@ def parse(filename, outfile, sep):
 
   for line in f:
     if (line[0] != '#') and (line.strip() != ''):
-    
-    
       pl = line.split(sep='<-')
       address = pl[0].strip()
       data = pl[1].strip()
