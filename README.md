@@ -15,7 +15,7 @@ B1=A1*A2
 
 I am an impatient man, and I really want to be able to not edit spreadsheets as soon as possible, and this intermediate language looks friendly enough for me, so I decided to start writing something to parse a language like that and generate a .CSV file which could be loaded into your spreadsheet of choice.
 
-Over a couple of lunch breaks, I've written this prototype which I fully intend to re-write and expand on with more features as time goes on.  Currently it's exceeingly basic, a proof of concept more than anything else and you probably shouldn't use it at all, but I'm putting it in github so I can easily work on it whereever I am.
+Over a couple of lunch breaks, I've written this prototype which I fully intend to re-write and expand on with more features as time goes on.  Currently it's exceedingly basic, a proof of concept more than anything else and you probably shouldn't use it at all, but I'm putting it in github so I can easily work on it whereever I am.
 
 It's MIT licensed, so knock yourselves out.
 
