@@ -1,0 +1,35 @@
+# Model of commuting costs
+A1 <- Zone 3 to UCL commute cost model
+A3 <- Daily
+A5 <- Journey
+B5 <- Ticket cost
+C5 <- Number
+D5 <- Total
+A6 <- Z3-Lon
+B6 <- 3.40
+C6 <- 1
+D6 <- = C6 * B6
+A7 <- Lon-Z3
+B7 <- 3.40
+C7 <- 1
+D7 <- = C7 * B7
+A8 <- Tube
+B8 <- 2.40
+C8 <- 2
+D8 <- = C8 * B8
+
+A11 <-  Cap
+B11 <- 7.60
+C11 <- Total
+D11 <- =sum(D6:D8)
+C12 <- Actual
+D12 <- =min(B11,D11)
+A13 <- Weekly
+A15 <- Cap (contactless)
+B15 <- 38.00
+C15 <- Total
+D15 <- = 5 * D11
+C16 <- Total (Week cap)
+D16 <- = 5 * D12
+C17 <- Actual
+D17 <- =min(B15,D15)
