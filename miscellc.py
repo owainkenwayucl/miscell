@@ -16,12 +16,41 @@ def numtoletter(num):
   else:
     return numtoletter(int(num/26)-1) + letters[a]
 
+# And back
 def lettertonum(letter):
   if len(letter) == 1:
     return letters.index(letter[0].upper())
   else:
     return letters.index(letter[len(letter)-1].upper()) + (26 * (lettertonum(letter[:-1])+1))
-     
+
+# Convert store to a list representation of the table.
+def storetotable(store, maxl, maxn):
+
+# Initialise in memory table
+  table = []
+  for i in range(maxl+1):    
+    table.append([])
+    for j in range(maxn+1):
+      table[i].append('')
+
+# Import store
+  for a in store.keys():
+    n = int(a.strip(string.ascii_uppercase).strip(string.ascii_lowercase))-1
+    le = lettertonum(a.strip('0123456789'))
+    table[le][n] = store[a]
+  return table
+
+# Output into CSV
+def outputcsv(table, csvfile, maxl, maxn):
+  csv="" 
+  for h in range(maxn+1):
+    line = ""
+    for d in range(maxl+1):
+       line = line + table[d][h] + sep
+    csv = csv + line + "\n"
+
+  of = open(csvfile, 'w')
+  of.write(csv)
 
 def parse(filename, outfile, sep):
   f = open(filename, 'r')
@@ -42,30 +71,8 @@ def parse(filename, outfile, sep):
       maxl=max(maxl,lettertonum(myletter))
   f.close()
 
-# Initialise in memory table
-  c = []
-  for i in range(maxl+1):    
-    c.append([])
-    for j in range(maxn+1):
-      c[i].append('')
-
-# Import store
-  for a in store.keys():
-    n = int(a.strip(string.ascii_uppercase).strip(string.ascii_lowercase))-1
-    le = lettertonum(a.strip('0123456789'))
-    c[le][n] = store[a]
- 
-
-# Output into CSV
-  csv="" 
-  for h in range(maxn+1):
-    line = ""
-    for d in range(maxl+1):
-       line = line + c[d][h] + sep
-    csv = csv + line + "\n"
-
-  of = open(outfile, 'w')
-  of.write(csv)
+  c = storetotable(store, maxl, maxn) 
+  outputcsv(c, outfile, maxl, maxn)
 
 if __name__ == '__main__':
   import argparse
