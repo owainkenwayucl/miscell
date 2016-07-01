@@ -53,6 +53,10 @@ $ ./miscellc.py -i examples/commute.mcl -o commute.csv
 
 By default, miscell uses a pipe "|" as a seperator, but you can specify any string you like with the *-s* option.
 
+First, write a program in your editor of choice.
+
+![Commute example](images/commute-source.png)
+
 You can then open the CSV file with your chosen spreadsheet, remembering to set the seperator appropriately.
 
 ![Import in LibreOffice](images/import.png)
@@ -66,5 +70,5 @@ And there you have it.
 * Support right -> assignment
 * Support importing and re-writing "data" CSV sheets
 * Robustness (there is currently none as this is a proof of concept)
-* Error message (currently you get a cryptic python error when things go wrong)
+* Error messages (currently you get a cryptic python error when things go wrong)
 * Spreadsheet -> miscell code program
