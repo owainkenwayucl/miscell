@@ -1,7 +1,7 @@
 # miscell
 ## A language for writing spreadsheets
 
-On Wednesday 22nd of June 2016, I attended a [talk](https://github.com/triangle-man/intro-to-cellular-talk) given by James Geddes (@triangle-man) about his Cellular project which aims to bridge the divide between coding and spreadsheets.  In it he described a fairly large and complex system he intends to build which will allow users to write some code in a to be designed programming language, put it through a compiler and have it spit out a spreadsheet.
+On Wednesday 22nd of June 2016, I attended a [talk](https://github.com/triangle-man/intro-to-cellular-talk) given by James Geddes ([@triangle-man](https://github.com/triangle-man)) about his Cellular project which aims to bridge the divide between coding and spreadsheets.  In it he described a fairly large and complex system he intends to build which will allow users to write some code in a to be designed programming language, put it through a compiler and have it spit out a spreadsheet.
 
 As part of the talk he described an intermediate language which looks something like this...
 
