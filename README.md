@@ -6,9 +6,9 @@ On Wednesday 22nd of June 2016, I attended a [talk](https://github.com/triangle-
 As part of the talk he described an intermediate language which looks something like this...
 
 ```none
-A1=45
-A2=57.3
-B1=A1*A2
+A1:=45
+A2:=57.3
+B1:=A1*A2
 ```
 
 ... and is the text file representation of the data you enter into a spreadsheet.
