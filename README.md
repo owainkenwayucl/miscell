@@ -1,7 +1,7 @@
 # miscell
 ## A language for writing spreadsheets
 
-On Wednesday 22nd of June 2016, I attended a talk given by James Geddes about his cellular project which aims to bridge the divide between coding and spreadsheets.  In it he described a fairly large and complex system he intends to build which will allow users to write some code in a to be designed programming language, put it through a compiler and have it spit out a spreadsheet.
+On Wednesday 22nd of June 2016, I attended a [talk](https://github.com/triangle-man/intro-to-cellular-talk) given by James Geddes (@triangle-man) about his Cellular project which aims to bridge the divide between coding and spreadsheets.  In it he described a fairly large and complex system he intends to build which will allow users to write some code in a to be designed programming language, put it through a compiler and have it spit out a spreadsheet.
 
 As part of the talk he described an intermediate language which looks something like this...
 
@@ -15,7 +15,7 @@ B1=A1*A2
 
 I am an impatient man, and I really want to be able to not edit spreadsheets as soon as possible, and this intermediate language looks friendly enough for me, so I decided to start writing something to parse a language like that and generate a .CSV file which could be loaded into your spreadsheet of choice.
 
-Over a couple of lunch breaks, I've written this prototype which I fully intend to re-write and expand on with more features as time goes on.  Currently it's exceedingly basic, a proof of concept more than anything else and you probably shouldn't use it at all, but I'm putting it in github so I can easily work on it whereever I am.
+Over a couple of lunch breaks, I've written this prototype which I fully intend to re-write and expand on with more features as time goes on.  Currently it's exceedingly basic, a proof of concept more than anything else and you probably shouldn't use it at all, but I'm putting it in github so I can easily work on it wherever I am.
 
 It's MIT licensed, so knock yourselves out.
 
