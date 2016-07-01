@@ -5,8 +5,6 @@
 import string
 letters=list(string.ascii_uppercase)
 
-# In memory representation of sheet.
-store = {}
 
 # Convert number references to letter references.
 def numtoletter(num):
@@ -41,7 +39,7 @@ def storetotable(store, maxl, maxn):
   return table
 
 # Output into CSV
-def outputcsv(table, csvfile, maxl, maxn):
+def outputcsv(table, csvfile, sep, maxl, maxn):
   csv="" 
   for h in range(maxn+1):
     line = ""
@@ -52,13 +50,18 @@ def outputcsv(table, csvfile, maxl, maxn):
   of = open(csvfile, 'w')
   of.write(csv)
 
-def parse(filename, outfile, sep):
-  f = open(filename, 'r')
+# Main parsing function
+def parse(filename):
+
+# In memory representation of sheet.
+  store = {}
 
 # Max extent of sheet.
   maxn = 0
   maxl = 0
 
+# Parse file
+  f = open(filename, 'r')
   for line in f:
     if (line[0] != '#') and (line.strip() != ''):
       pl = line.split(sep='<-')
@@ -71,8 +74,8 @@ def parse(filename, outfile, sep):
       maxl=max(maxl,lettertonum(myletter))
   f.close()
 
-  c = storetotable(store, maxl, maxn) 
-  outputcsv(c, outfile, maxl, maxn)
+  return[store, maxl, maxn]
+
 
 if __name__ == '__main__':
   import argparse
@@ -93,6 +96,12 @@ if __name__ == '__main__':
       of = args.o
     if (args.s != None):
       sep = args.s
-    parse(inf, of, sep)
+    p = parse(inf)
+    store = p[0]
+    maxl = p[1]
+    maxn = p[2]
+    table = storetotable(store, maxl, maxn) 
+    outputcsv(table, of, sep, maxl, maxn)
+
   else:
     print('Error - must specify input file.');
