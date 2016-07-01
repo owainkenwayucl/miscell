@@ -45,17 +45,17 @@ Comments *must* start with a "\#" as the first character on the line.
 
 ## Operation
 
-You currently invoke miscell withe the *miscellc.py* command like so:
+First, write a program in your editor of choice.
+
+![Commute example](images/commute-source.png)
+
+Then invoke miscell withe the *miscellc.py* command like so:
 
 ```bash
 $ ./miscellc.py -i examples/commute.mcl -o commute.csv
 ```
 
 By default, miscell uses a pipe "|" as a seperator, but you can specify any string you like with the *-s* option.
-
-First, write a program in your editor of choice.
-
-![Commute example](images/commute-source.png)
 
 You can then open the CSV file with your chosen spreadsheet, remembering to set the seperator appropriately.
 
