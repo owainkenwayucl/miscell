@@ -2,9 +2,8 @@
 
 # First attempt at a parser.
 
-import string
+import string, sys
 letters=list(string.ascii_uppercase)
-
 
 # Convert number references to letter references.
 def numtoletter(num):
@@ -63,10 +62,22 @@ def parse(filename):
 # Parse file
   f = open(filename, 'r')
   for line in f:
-    if (line[0] != '#') and (line.strip() != ''):
-      pl = line.split(sep='<-')
-      address = pl[0].strip()
-      data = '<-'.join(pl[1:]).strip()
+# Knock out everything to the right of a comment.
+    nocomments = line.split(sep="#")[0].strip()
+
+#  Ignore blank/entirely comment lines
+    if nocomments != '':
+      if '<-' in nocomments: 
+        pl = nocomments.split(sep='<-')
+        address = pl[0].strip().upper()
+        data = '<-'.join(pl[1:]).strip()
+      elif '->' in nocomments:
+        pl = nocomments.split(sep='->')
+        address = pl[len(pl)-1].strip().upper()
+        data = '->'.join(pl[len(pl)-1:]).strip()
+      else:  
+        print('Unrecognisable line: ' + line)
+        sys.exit(1)  
       store[address] = data
       mynum = address.strip(string.ascii_uppercase).strip(string.ascii_lowercase)
       myletter = address.strip('0123456789')
