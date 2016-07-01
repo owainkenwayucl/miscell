@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-# First attempt at a parser.
+# Program to parse miscell programs and generate CSV sheets.
+# Dr Owain Kenway, 2016
+# Distributed under the MIT license.
 
 import string, sys
 letters=list(string.ascii_uppercase)
@@ -64,40 +66,52 @@ def parse(filename):
   lineno = 1
   fail = False
   for line in f:
+
 # Knock out everything to the right of a comment.
     nocomments = line.split(sep="#")[0].strip() 
-#  Ignore blank/entirely comment lines
+
+# Ignore blank/entirely comment lines
     if nocomments != '':
       if '<-' in nocomments:
+
+# Catch ambiguous lines.
         if '->' in nocomments:
           print('Ambiguous line ' + str(lineno) + ': ' + line.strip())
           print('  (this error is caused by having both a <- and a -> on one line)')
           fail = True 
-        pl = nocomments.split(sep='<-')
-        address = pl[0].strip().upper()
-        data = '<-'.join(pl[1:]).strip()
+        else:
+          pl = nocomments.split(sep='<-')
+          address = pl[0].strip().upper()
+          data = '<-'.join(pl[1:]).strip()
       elif '->' in nocomments:
         pl = nocomments.split(sep='->')
         address = pl[len(pl)-1].strip().upper()
         data = '->'.join(pl[len(pl)-1:]).strip()
-      else:  
+      else: 
+ 
+# If we've reached this stage, there is no rule for a line.
         print('Unrecognisable line ' + str(lineno) + ': ' + line.strip())
         fail = True
-      store[address] = data
-      mynum = address.strip(string.ascii_uppercase).strip(string.ascii_lowercase)
-      myletter = address.strip('0123456789')
-      maxn=max(maxn,int(mynum)-1)
-      maxl=max(maxl,lettertonum(myletter))
+
+# If we've failed, don't do anything to data structures.
+# We aren't going to use them and we only want to parse to find more errors.
+      if not fail:
+        store[address] = data
+        mynum = address.strip(string.ascii_uppercase).strip(string.ascii_lowercase)
+        myletter = address.strip('0123456789')
+        maxn=max(maxn,int(mynum)-1)
+        maxl=max(maxl,lettertonum(myletter))
     lineno = lineno + 1
   f.close()
 
+# If fail has been set while parsing, exit with a 1.
   if fail:
     print('Errors in file "' + filename + '", exiting without proceeding...')
     sys.exit(1)
 
   return[store, maxl, maxn]
 
-
+# Our main function.
 if __name__ == '__main__':
   import argparse
 
