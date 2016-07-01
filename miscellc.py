@@ -61,13 +61,18 @@ def parse(filename):
 
 # Parse file
   f = open(filename, 'r')
+  lineno = 1
+  fail = False
   for line in f:
 # Knock out everything to the right of a comment.
-    nocomments = line.split(sep="#")[0].strip()
-
+    nocomments = line.split(sep="#")[0].strip() 
 #  Ignore blank/entirely comment lines
     if nocomments != '':
-      if '<-' in nocomments: 
+      if '<-' in nocomments:
+        if '->' in nocomments:
+          print('Ambiguous line ' + str(lineno) + ': ' + line.strip())
+          print('  (this error is caused by having both a <- and a -> on one line)')
+          fail = True 
         pl = nocomments.split(sep='<-')
         address = pl[0].strip().upper()
         data = '<-'.join(pl[1:]).strip()
@@ -76,14 +81,19 @@ def parse(filename):
         address = pl[len(pl)-1].strip().upper()
         data = '->'.join(pl[len(pl)-1:]).strip()
       else:  
-        print('Unrecognisable line: ' + line)
-        sys.exit(1)  
+        print('Unrecognisable line ' + str(lineno) + ': ' + line.strip())
+        fail = True
       store[address] = data
       mynum = address.strip(string.ascii_uppercase).strip(string.ascii_lowercase)
       myletter = address.strip('0123456789')
       maxn=max(maxn,int(mynum)-1)
       maxl=max(maxl,lettertonum(myletter))
+    lineno = lineno + 1
   f.close()
+
+  if fail:
+    print('Errors in file "' + filename + '", exiting without proceeding...')
+    sys.exit(1)
 
   return[store, maxl, maxn]
 
