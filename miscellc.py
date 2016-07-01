@@ -66,7 +66,7 @@ def parse(filename):
     if (line[0] != '#') and (line.strip() != ''):
       pl = line.split(sep='<-')
       address = pl[0].strip()
-      data = pl[1].strip()
+      data = '<-'.join(pl[1:]).strip()
       store[address] = data
       mynum = address.strip(string.ascii_uppercase).strip(string.ascii_lowercase)
       myletter = address.strip('0123456789')
