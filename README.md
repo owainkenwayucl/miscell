@@ -31,17 +31,26 @@ A1 <- 56
 
 when compiled will produce a spreadsheet where A1 is 56.
 
+You can also assign the other way so:
+
+```none
+56 -> A1
+```
+
+Is the same as the previous statement.
+
 You can include expressions in "spreadsheet language" and they'll be interpreted (or at least they are in LibreOffice and Excel).
 
 ```none
 A1 <- 2
 A2 <- 3
 B1 <- = A1 * A2
+=A1 * A2 -> B2 #B2 will have the same value as B1
 ```
 
-Will generate a spreadsheet where A1 is 2, A2 is 3 and B1 is the expression "= A1 * A2".
+Will generate a spreadsheet where A1 is 2, A2 is 3 and B1 and B2 are the expression "= A1 * A2".
 
-Comments *must* start with a "\#" as the first character on the line.
+Comments *must* start with a "\#".
 
 ## Operation
 
@@ -67,8 +76,6 @@ And there you have it.
 
 ## To come(!)
 
-* Support right -> assignment
 * Support importing and re-writing "data" CSV sheets
-* Robustness (there is currently none as this is a proof of concept)
-* Error messages (currently you get a cryptic python error when things go wrong)
+* Robustness (there is currently little as this is a proof of concept)
 * Spreadsheet -> miscell code program
