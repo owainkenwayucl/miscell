@@ -134,7 +134,7 @@ def parse(filename):
         pl = nocomments.split(sep='->')
         address = pl[len(pl)-1].strip().upper()
         data = '->'.join(pl[len(pl)-1:]).strip()
-      elif nocomments.strip().split()[0] == 'data:':
+      elif nocomments.strip().split()[0].lower() == 'data:':
         elements = nocomments.strip().split()
         if len(elements) != 4:
           print('Wrong number of elements on data line ' + str(lineno) + ': ' + line.strip())
