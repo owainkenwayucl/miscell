@@ -51,6 +51,53 @@ def outputcsv(table, csvfile, sep, maxl, maxn):
   of = open(csvfile, 'w')
   of.write(csv)
 
+# Code to get number out of a cell reference
+def celltonum(address):
+  return int(address.strip(string.ascii_uppercase).strip(string.ascii_lowercase))
+
+# Code to get letter out of a cell reference
+def celltoletter(address):
+  return address.strip('0123456789')
+
+
+# Code to import a CSV
+def csvimport(offset, csvfile, sep):
+  offnum = celltonum(offset)
+  offlet = celltoletter(offset)
+
+  localstore = {}
+
+  lslet = offlet
+
+  f = open(csvfile, 'r')
+  for line in f:
+    lsnum = offnum
+    items = line.split(sep=sep)
+
+    for item in items:
+      addr = lslet+str(lsnum)
+      localstore[addr] = item.strip()
+      lsnum = lsnum + 1
+
+    lslet = numtoletter(lettertonum(lslet) + 1)
+
+  f.close()
+
+  return localstore
+  
+# Code to get the extent of a store
+def getextent(store):
+  maxl = 0
+  maxn = 0
+
+  for a in (store.keys()):
+    anum = celltonum(a)
+    alet = lettertonum(celltoletter(a))
+    maxn=max(maxn,anum-1)
+    maxl=max(maxl,alet)
+
+  return [maxl, maxn] 
+
 # Main parsing function
 def parse(filename):
 
@@ -87,6 +134,19 @@ def parse(filename):
         pl = nocomments.split(sep='->')
         address = pl[len(pl)-1].strip().upper()
         data = '->'.join(pl[len(pl)-1:]).strip()
+      elif nocomments.strip().split()[0] == 'data:':
+        elements = nocomments.strip().split()
+        if len(elements) != 4:
+          print('Wrong number of elements on data line ' + str(lineno) + ': ' + line.strip())
+          print('  Data line should be of the format data: <cell> <file> <separator>')
+          fail = True
+        else:
+          datastore = csvimport(elements[1], elements[2], elements[3])
+          for item in datastore.keys():
+            store[item] = str(datastore[item])
+          ext = getextent(store)
+          maxl = ext[0]
+          maxn = ext[1]
       else: 
  
 # If we've reached this stage, there is no rule for a line.
@@ -97,9 +157,9 @@ def parse(filename):
 # We aren't going to use them and we only want to parse to find more errors.
       if not fail:
         store[address] = data
-        mynum = address.strip(string.ascii_uppercase).strip(string.ascii_lowercase)
-        myletter = address.strip('0123456789')
-        maxn=max(maxn,int(mynum)-1)
+        mynum = celltonum(address)
+        myletter = celltoletter(address)
+        maxn=max(maxn,mynum-1)
         maxl=max(maxl,lettertonum(myletter))
     lineno = lineno + 1
   f.close()
@@ -140,3 +200,4 @@ if __name__ == '__main__':
 
   else:
     print('Error - must specify input file.');
+    sys.exit(2)
