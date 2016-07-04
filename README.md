@@ -52,6 +52,14 @@ Will generate a spreadsheet where A1 is 2, A2 is 3 and B1 and B2 are the express
 
 Comments *must* start with a "\#".
 
+You can import other CSV files to use as datafiles.  This can be done with statements like:
+
+```none
+data: A6 examples/data.csv ,
+```
+
+which would import the file *examples/data.csv* into the current sheet starting at location A6, and that the separator in *examples/data.csv* is a comma.
+
 ## Operation
 
 First, write a program in your editor of choice.
@@ -76,6 +84,6 @@ And there you have it.
 
 ## To come(!)
 
-* Support importing and re-writing "data" CSV sheets
+* Support re-writing of "data" CSV sheets
 * Robustness (there is currently little as this is a proof of concept)
 * Spreadsheet -> miscell code program
