@@ -72,9 +72,9 @@ Then invoke miscell withe the *miscellc.py* command like so:
 $ ./miscellc.py -i examples/commute.mcl -o commute.csv
 ```
 
-By default, miscell uses a pipe "|" as a seperator, but you can specify any string you like with the *-s* option.
+By default, miscell uses a pipe "|" as a separator, but you can specify any string you like with the *-s* option.
 
-You can then open the CSV file with your chosen spreadsheet, remembering to set the seperator appropriately.
+You can then open the CSV file with your chosen spreadsheet, remembering to set the separator appropriately.
 
 ![Import in LibreOffice](images/import.png)
 
@@ -82,8 +82,15 @@ And there you have it.
 
 ![commute.csv in LibreOffice](images/commute.png)
 
+You can convert CSV files to MCL files with the *-b* option.
+
+```bash
+$ ./miscellc.py -b -i examples/data.csv  -s , -o test.mcl
+```
+
+This converts *examples/data.csv* (which uses the separator *,*) to *test.mcl*.
+
 ## To come(!)
 
 * Support re-writing of "data" CSV sheets
 * Robustness (there is currently little as this is a proof of concept)
-* Spreadsheet -> miscell code program
