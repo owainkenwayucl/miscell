@@ -79,20 +79,20 @@ def csvimport(offset, csvfile, sep):
   offnum = celltonum(offset)
   offlet = celltoletter(offset.upper())
   localstore = {}
-  lslet = offlet
+  lsnum = offnum
 
   f = open(csvfile, 'r')
 
   for line in f:
-    lsnum = offnum
+    lslet = offlet
     items = line.split(sep=sep)
 
     for item in items:
       addr = lslet+str(lsnum)
       localstore[addr] = item.strip()
-      lsnum = lsnum + 1
+      lslet = numtoletter(lettertonum(lslet) + 1)
 
-    lslet = numtoletter(lettertonum(lslet) + 1)
+    lsnum = lsnum + 1
 
   f.close()
   return localstore
@@ -123,10 +123,11 @@ def dumpmcl(store, outputfile):
   for item in addresses:
 # If we have a right assignment and a <- in the data segment we should do a
 # right assignment in the dumped mcl to avoid generating ambiguous lines.
-    if '->' in store[item]:
-      mcl = mcl + store[item] + ' -> ' + item + '\n'
-    else:
-      mcl = mcl + item + ' <- ' + store[item] + '\n'
+    if store[item].strip() != "":
+      if '->' in store[item]:
+        mcl = mcl + store[item] + ' -> ' + item + '\n'
+      else:
+        mcl = mcl + item + ' <- ' + store[item] + '\n'
 
   f = open(outputfile, 'w')
   f.write(mcl)
