@@ -7,7 +7,9 @@
 import string, sys
 letters=list(string.ascii_uppercase)
 
+# -----------------------------------------------
 # Convert number references to letter references.
+# -----------------------------------------------
 def numtoletter(num):
   a=num%26
   if (a == num):
@@ -15,14 +17,18 @@ def numtoletter(num):
   else:
     return numtoletter(int(num/26)-1) + letters[a]
 
+# --------
 # And back
+# --------
 def lettertonum(letter):
   if len(letter) == 1:
     return letters.index(letter[0].upper())
   else:
     return letters.index(letter[len(letter)-1].upper()) + (26 * (lettertonum(letter[:-1])+1))
 
+# ----------------------------------------------------
 # Convert store to a list representation of the table.
+# ----------------------------------------------------
 def storetotable(store, maxl, maxn):
 
 # Initialise in memory table
@@ -39,7 +45,9 @@ def storetotable(store, maxl, maxn):
     table[le][n] = store[a]
   return table
 
-# Output into CSV
+# ----------------
+# Output into CSV.
+# ----------------
 def outputcsv(table, csvfile, sep, maxl, maxn):
   csv="" 
   for h in range(maxn+1):
@@ -51,25 +59,29 @@ def outputcsv(table, csvfile, sep, maxl, maxn):
   of = open(csvfile, 'w')
   of.write(csv)
 
-# Code to get number out of a cell reference
+# -------------------------------------------
+# Code to get number out of a cell reference.
+# -------------------------------------------
 def celltonum(address):
   return int(address.strip(string.ascii_uppercase).strip(string.ascii_lowercase))
 
-# Code to get letter out of a cell reference
+# -------------------------------------------
+# Code to get letter out of a cell reference.
+# -------------------------------------------
 def celltoletter(address):
   return address.strip('0123456789')
 
-
-# Code to import a CSV
+# ---------------------
+# Code to import a CSV.
+# ---------------------
 def csvimport(offset, csvfile, sep):
   offnum = celltonum(offset)
   offlet = celltoletter(offset.upper())
-
   localstore = {}
-
   lslet = offlet
 
   f = open(csvfile, 'r')
+
   for line in f:
     lsnum = offnum
     items = line.split(sep=sep)
@@ -82,10 +94,11 @@ def csvimport(offset, csvfile, sep):
     lslet = numtoletter(lettertonum(lslet) + 1)
 
   f.close()
-
   return localstore
-  
-# Code to get the extent of a store
+
+# ----------------------------------  
+# Code to get the extent of a store.
+# ----------------------------------
 def getextent(store):
   maxl = 0
   maxn = 0
@@ -98,7 +111,9 @@ def getextent(store):
 
   return [maxl, maxn] 
 
-# Main parsing function
+# ----------------------
+# Main parsing function.
+# ----------------------
 def parse(filename):
 
 # In memory representation of sheet.
@@ -185,7 +200,9 @@ def parse(filename):
 
   return[store, maxl, maxn]
 
+# ------------------
 # Our main function.
+# ------------------
 if __name__ == '__main__':
   import argparse
 
