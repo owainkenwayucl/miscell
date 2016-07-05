@@ -17,9 +17,9 @@ def numtoletter(num):
   else:
     return numtoletter(int(num/26)-1) + letters[a]
 
-# --------
-# And back
-# --------
+# ---------
+# And back.
+# ---------
 def lettertonum(letter):
   if len(letter) == 1:
     return letters.index(letter[0].upper())
@@ -58,6 +58,7 @@ def outputcsv(table, csvfile, sep, maxl, maxn):
 
   of = open(csvfile, 'w')
   of.write(csv)
+  of.close()
 
 # -------------------------------------------
 # Code to get number out of a cell reference.
@@ -110,6 +111,26 @@ def getextent(store):
     maxl=max(maxl,alet)
 
   return [maxl, maxn] 
+
+# ----------------------------------------
+# Code to dump a store out to an mcl file.
+# ----------------------------------------
+def dumpmcl(store, outputfile):
+  addresses = list(store.keys())
+  addresses.sort()
+
+  mcl = '# Auto generated MCL file.\n'
+  for item in addresses:
+# If we have a right assignment and a <- in the data segment we should do a
+# right assignment in the dumped mcl to avoid generating ambiguous lines.
+    if '->' in store[item]:
+      mcl = mcl + store[item] + ' -> ' + item + '\n'
+    else:
+      mcl = mcl + item + ' <- ' + store[item] + '\n'
+
+  f = open(outputfile, 'w')
+  f.write(mcl)
+  f.close()      
 
 # ----------------------
 # Main parsing function.
@@ -209,7 +230,8 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Generate CSV from script.')
   parser.add_argument('-i', metavar='filename', type=str, help='Source file.')
   parser.add_argument('-o', metavar='filename', type=str, help='Output file.')
-  parser.add_argument('-s', metavar='character', type=str, help='CSV seperator')
+  parser.add_argument('-s', metavar='character', type=str, help='CSV seperator.')
+  parser.add_argument('-d', metavar='filename', type=str, help='Dump intermediate MCL to file.')
 
   args = parser.parse_args()
   
@@ -226,6 +248,8 @@ if __name__ == '__main__':
     store = p[0]
     maxl = p[1]
     maxn = p[2]
+    if (args.d != None):
+      dumpmcl(store, args.d)
     table = storetotable(store, maxl, maxn) 
     outputcsv(table, of, sep, maxl, maxn)
 
