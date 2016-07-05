@@ -248,6 +248,8 @@ if __name__ == '__main__':
       if (args.s != None):
         sep = args.s
       store = csvimport('A1', inf, sep)
+      if (args.d != None):
+        dumpmcl(store, args.d)
       dumpmcl(store, of)
     else:
       print('Error - must specify input file.');
