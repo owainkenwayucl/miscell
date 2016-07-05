@@ -85,10 +85,10 @@ And there you have it.
 You can convert CSV files to MCL files with the *-b* option.
 
 ```bash
-$ ./miscellc.py -b -i examples/data.csv  -s , -o test.mcl
+$ ./miscellc.py -b -i examples/data.csv  -s , -o data.mcl
 ```
 
-This converts *examples/data.csv* (which uses the separator *,*) to *test.mcl*.
+This converts *examples/data.csv* (which uses the separator *,*) to *data.mcl*.
 
 ## To come(!)
 
