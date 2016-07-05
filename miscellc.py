@@ -63,7 +63,7 @@ def celltoletter(address):
 # Code to import a CSV
 def csvimport(offset, csvfile, sep):
   offnum = celltonum(offset)
-  offlet = celltoletter(offset)
+  offlet = celltoletter(offset.upper())
 
   localstore = {}
 
@@ -111,21 +111,22 @@ def parse(filename):
 # Parse file
   f = open(filename, 'r')
   lineno = 1
-  fail = False
+  fail = 0
+  warnings = 0
   for line in f:
 
 # Knock out everything to the right of a comment.
     nocomments = line.split(sep="#")[0].strip() 
-
+    address = 'UNSET'
 # Ignore blank/entirely comment lines
     if nocomments != '':
       if '<-' in nocomments:
 
 # Catch ambiguous lines.
         if '->' in nocomments:
-          print('Ambiguous line ' + str(lineno) + ': ' + line.strip())
+          print('ERROR - Ambiguous line ' + str(lineno) + ': ' + line.strip())
           print('  (this error is caused by having both a <- and a -> on one line)')
-          fail = True 
+          fail = fail + 1 
         else:
           pl = nocomments.split(sep='<-')
           address = pl[0].strip().upper()
@@ -137,12 +138,17 @@ def parse(filename):
       elif nocomments.strip().split()[0].lower() == 'data:':
         elements = nocomments.strip().split()
         if len(elements) != 4:
-          print('Wrong number of elements on data line ' + str(lineno) + ': ' + line.strip())
+          print('ERROR - Wrong number of elements on data line ' + str(lineno) + ': ' + line.strip())
           print('  Data line should be of the format data: <cell> <file> <separator>')
-          fail = True
+          fail = fail + 1
         else:
           datastore = csvimport(elements[1], elements[2], elements[3])
           for item in datastore.keys():
+            if item in store.keys():
+              print('WARNING - Overwriting element: ' + item)
+              print('  Original value: ' + store[item])
+              print('  New value: ' + datastore[item])
+              warnings = warnings + 1
             store[item] = str(datastore[item])
           ext = getextent(store)
           maxl = ext[0]
@@ -150,12 +156,16 @@ def parse(filename):
       else: 
  
 # If we've reached this stage, there is no rule for a line.
-        print('Unrecognisable line ' + str(lineno) + ': ' + line.strip())
-        fail = True
+        print('ERROR - Unrecognisable line ' + str(lineno) + ': ' + line.strip())
+        fail = fail + 1
 
-# If we've failed, don't do anything to data structures.
-# We aren't going to use them and we only want to parse to find more errors.
-      if not fail:
+# If we've failed to set address, don't do anything to data structures.
+      if address != 'UNSET':
+        if address in store.keys():
+          print('WARNING - Overwriting element: ' + address)
+          print('  Original value: ' + store[address])
+          print('  New value: ' + data)
+          warnings = warnings + 1
         store[address] = data
         mynum = celltonum(address)
         myletter = celltoletter(address)
@@ -164,9 +174,13 @@ def parse(filename):
     lineno = lineno + 1
   f.close()
 
+# If we had warnings, report.
+  if warnings > 0:
+    print(str(warnings) + ' warnings while processing "' + filename + '".')
+
 # If fail has been set while parsing, exit with a 1.
-  if fail:
-    print('Errors in file "' + filename + '", exiting without proceeding...')
+  if fail > 0:
+    print(str(fail) + ' errors in file "' + filename + '", exiting without proceeding...')
     sys.exit(1)
 
   return[store, maxl, maxn]
