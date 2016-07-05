@@ -232,27 +232,46 @@ if __name__ == '__main__':
   parser.add_argument('-o', metavar='filename', type=str, help='Output file.')
   parser.add_argument('-s', metavar='character', type=str, help='CSV seperator.')
   parser.add_argument('-d', metavar='filename', type=str, help='Dump intermediate MCL to file.')
+  parser.add_argument('-b', action='store_true', help='Convert CSV to MCL.')
 
   args = parser.parse_args()
-  
-  of = 'out.csv'
   sep = '|'
+  
+  if args.b:
+# backwards operaton (CSV -> MCL).
+    of = 'out.mcl'
 
-  if (args.i != None):
-    inf = args.i
-    if (args.o != None):
-      of = args.o
-    if (args.s != None):
-      sep = args.s
-    p = parse(inf)
-    store = p[0]
-    maxl = p[1]
-    maxn = p[2]
-    if (args.d != None):
-      dumpmcl(store, args.d)
-    table = storetotable(store, maxl, maxn) 
-    outputcsv(table, of, sep, maxl, maxn)
-
+    if (args.i != None):
+      inf = args.i
+      if (args.o != None):
+        of = args.o    
+      if (args.s != None):
+        sep = args.s
+      store = csvimport('A1', inf, sep)
+      dumpmcl(store, of)
+    else:
+      print('Error - must specify input file.');
+      sys.exit(2)
+    
   else:
-    print('Error - must specify input file.');
-    sys.exit(2)
+# normal operation (MCL -> CSV).
+    of = 'out.csv'
+    
+    if (args.i != None):
+      inf = args.i
+      if (args.o != None):
+        of = args.o
+      if (args.s != None):
+        sep = args.s
+      p = parse(inf)
+      store = p[0]
+      maxl = p[1]
+      maxn = p[2]
+      if (args.d != None):
+        dumpmcl(store, args.d)
+      table = storetotable(store, maxl, maxn) 
+      outputcsv(table, of, sep, maxl, maxn)
+
+    else:
+      print('Error - must specify input file.');
+      sys.exit(2)
