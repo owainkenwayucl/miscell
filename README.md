@@ -60,6 +60,14 @@ data: A6 examples/data.csv ,
 
 which would import the file *examples/data.csv* into the current sheet starting at location A6, and that the separator in *examples/data.csv* is a comma.
 
+You can import JSON fimes to use as data files *(note that this is very flimsy at the moment)*:
+
+```none
+json A3 "files/petition.json" "data attributes signatures_by_country" "name signature_count"
+```
+
+Would import *files/petition.json*, navigate the JSON structure *data* -> *attriibutes* -> *signatures_by_country* and then add the fields *name* and *signature_count* to the spreadsheet as columns starting at A3.
+
 ## Operation
 
 First, write a program in your editor of choice.
