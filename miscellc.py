@@ -4,7 +4,7 @@
 # Dr Owain Kenway, 2016
 # Distributed under the MIT license.
 
-import string, sys
+import string, sys, shlex
 letters=list(string.ascii_uppercase)
 
 # -----------------------------------------------
@@ -133,6 +133,83 @@ def dumpmcl(store, outputfile):
   f.write(mcl)
   f.close()      
 
+# ---------------------------------------------
+# Code to navigate a JSON path in a dictionary.
+# ---------------------------------------------
+
+def navj(jdict, path):
+  if (len(path) == 0):
+    return jdict
+  else:
+    return(navj(jdict[path[0]], path[1:]))
+
+# --------------------
+# Code to import JSON.
+# --------------------
+def jsonimport(offset, jsonfile, jsonpath, jsonfield):
+  import json
+ 
+  splitpath = jsonpath.split()
+
+  print("Navigating path: " + str(splitpath))
+
+# Import json file
+  f = open(jsonfile, 'r')
+  jdict = json.load(f)
+
+# Navigate to right place in file dict
+  jstor = navj(jdict, splitpath)
+
+  if (type(jstor) is list):
+    return implist(offset, jstor, jsonfield.split())
+  else:
+    return impdict(offset, jstor, jsonfield.split())
+
+# -------------------
+# Code to import dict
+# -------------------
+def impdict(offset, d, fields):
+  localstore = {}
+  print("NOT IMPLEMENTED")
+  return localstore
+
+
+# --------------------
+# Code to import list.
+# --------------------
+def implist(offset, l, fields):
+  localstore = {}
+
+# OK, what we hope to have at this point is a list of dicts, each of which are
+# key paired to some of the values in fields.
+  offnum = celltonum(offset)
+  offlet = celltoletter(offset.upper())
+
+  lsnum = offnum
+  lslet = offlet
+
+# Generate column headers.
+  for c in fields:
+    addr = lslet+str(lsnum)
+    localstore[addr] = str(c).strip()
+
+    lslet = numtoletter(lettertonum(lslet) + 1)
+    
+# Generate columns.
+  lsnum = offnum + 1
+  
+  for a in l:
+    lslet = offlet
+    for b in fields:
+      addr = lslet+str(lsnum)
+      localstore[addr] = str(a[b]).strip()
+
+      lslet = numtoletter(lettertonum(lslet) + 1)
+    lsnum = lsnum + 1
+
+  return localstore
+
+
 # ----------------------
 # Main parsing function.
 # ----------------------
@@ -173,13 +250,31 @@ def parse(filename):
         address = pl[len(pl)-1].strip().upper()
         data = '->'.join(pl[len(pl)-1:]).strip()
       elif nocomments.strip().split()[0].lower() == 'data:':
-        elements = nocomments.strip().split()
+        elements = shlex.split(nocomments.strip())
         if len(elements) != 4:
           print('ERROR - Wrong number of elements on data line ' + str(lineno) + ': ' + line.strip())
           print('  Data line should be of the format data: <cell> <file> <separator>')
           fail = fail + 1
         else:
           datastore = csvimport(elements[1], elements[2], elements[3])
+          for item in datastore.keys():
+            if item in store.keys():
+              print('WARNING - Overwriting element: ' + item)
+              print('  Original value: ' + store[item])
+              print('  New value: ' + datastore[item])
+              warnings = warnings + 1
+            store[item] = str(datastore[item])
+          ext = getextent(store)
+          maxl = ext[0]
+          maxn = ext[1]
+      elif nocomments.strip().split()[0].lower() == 'json:':
+        elements = shlex.split(nocomments.strip())
+        if len(elements) != 5:
+          print('ERROR - Wrong number of elements on JSON line ' + str(lineno) + ': ' + line.strip())
+          print('  JSON line should be of the format json: <cell> <file> <path> <fields>')
+          fail = fail + 1
+        else:
+          datastore = jsonimport(elements[1], elements[2], elements[3], elements[4])
           for item in datastore.keys():
             if item in store.keys():
               print('WARNING - Overwriting element: ' + item)
