@@ -151,8 +151,6 @@ def jsonimport(offset, jsonfile, jsonpath, jsonfield):
  
   splitpath = jsonpath.split()
 
-  print("Navigating path: " + str(splitpath))
-
 # Import json file
   f = open(jsonfile, 'r')
   jdict = json.load(f)
@@ -176,21 +174,21 @@ def impdict(offset, d, fields):
   offnum = celltonum(offset)
   offlet = celltoletter(offset.upper())
 
+# Generate column headers.
   lsnum = offnum
   lslet = offlet
   for c in fields:
     addr = lslet+str(lsnum)
     localstore[addr] = str(c).strip()
     lslet = numtoletter(lettertonum(lslet) + 1)
-    
 
+# Generate columns.
   lsnum = offnum + 1
   lslet = offlet
   for e in fields:
     addr = lslet+str(lsnum)
     localstore[addr] = str(d[e]).strip()
     lslet = numtoletter(lettertonum(lslet) + 1)
-
 
   return localstore
 
