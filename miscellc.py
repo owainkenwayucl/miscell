@@ -170,7 +170,28 @@ def jsonimport(offset, jsonfile, jsonpath, jsonfield):
 # -------------------
 def impdict(offset, d, fields):
   localstore = {}
-  print("NOT IMPLEMENTED")
+
+# What we have here is a dictionary and a set of keys to add.
+
+  offnum = celltonum(offset)
+  offlet = celltoletter(offset.upper())
+
+  lsnum = offnum
+  lslet = offlet
+  for c in fields:
+    addr = lslet+str(lsnum)
+    localstore[addr] = str(c).strip()
+    lslet = numtoletter(lettertonum(lslet) + 1)
+    
+
+  lsnum = offnum + 1
+  lslet = offlet
+  for e in fields:
+    addr = lslet+str(lsnum)
+    localstore[addr] = str(d[e]).strip()
+    lslet = numtoletter(lettertonum(lslet) + 1)
+
+
   return localstore
 
 
