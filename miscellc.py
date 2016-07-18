@@ -6,6 +6,7 @@
 
 import string, sys, shlex
 letters=list(string.ascii_uppercase)
+numbers='0123456789'
 
 # -----------------------------------------------
 # Convert number references to letter references.
@@ -26,6 +27,34 @@ def lettertonum(letter):
   else:
     return letters.index(letter[len(letter)-1].upper()) + (26 * (lettertonum(letter[:-1])+1))
 
+# -------------------------
+# Validate address strings.
+# -------------------------
+def validadd(addr):
+  uppaddr=addr.upper().strip()
+  left=''
+  right=''
+  stop=False
+# split at first nonletter
+  for a in uppaddr:
+    if a in letters and not stop:
+      left = left + a
+    else:
+      stop = True
+      right = right + a
+  
+  isLetter=(len(left) > 0)
+    
+  
+  isNumber=True
+  for b in right:
+    if b not in numbers:
+      isNumber=False
+  if len(right)==0:
+    isNumber=False
+
+  return (isLetter and isNumber)
+  
 # ----------------------------------------------------
 # Convert store to a list representation of the table.
 # ----------------------------------------------------
