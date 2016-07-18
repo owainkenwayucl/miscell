@@ -31,12 +31,12 @@ def lettertonum(letter):
 # Validate address strings.
 # -------------------------
 def validadd(addr):
-  uppaddr=addr.upper().strip()
+  upaddr=addr.upper().strip()
   left=''
   right=''
   stop=False
 # split at first nonletter
-  for a in uppaddr:
+  for a in upaddr:
     if a in letters and not stop:
       left = left + a
     else:
@@ -340,6 +340,10 @@ def parse(filename):
         fail = fail + 1
 
 # If we've failed to set address, don't do anything to data structures.
+      if not validadd(address) and address != 'UNSET':
+        print('ERROR - Invalid cell address on line ' + str(lineno) + ': ' + str(address))
+        fail = fail + 1
+        address = 'UNSET'
       if address != 'UNSET':
         if address in store.keys():
           print('WARNING - Overwriting element: ' + address)
