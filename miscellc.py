@@ -70,7 +70,7 @@ def storetotable(store, maxl, maxn):
 # Import store
   for a in store.keys():
     n = int(a.strip(string.ascii_uppercase).strip(string.ascii_lowercase))-1
-    le = lettertonum(a.strip('0123456789'))
+    le = lettertonum(a.strip(numbers))
     table[le][n] = store[a]
   return table
 
