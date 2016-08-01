@@ -423,5 +423,5 @@ if __name__ == '__main__':
       outputcsv(table, of, sep, maxl, maxn)
 
     else:
-      print('Error - must specify input file.');
+      print('Error - must specify input file.')
       sys.exit(2)
