@@ -333,6 +333,28 @@ def parse(filename):
           ext = getextent(store)
           maxl = ext[0]
           maxn = ext[1]
+      elif nocomments.strip().split()[0].lower() == 'fillcol:':
+        elements = shlex.split(nocomments.strip())
+        if len(elements) != 5:
+          print('ERROR - Wrong number of elements on fill column line ' + str(lineno) + ': ' + line.strip())
+          print('  Fill column line should be of the format fillcol: <letter> <start> <finish> <data>')
+          fail = fail + 1
+        else:
+          fillcolletter = elements[1]
+          fillcolstart = int(elements[2])
+          fillcolstop = int(elements[3])
+          fillcoldat = elements[4]
+          for colcel in range(fillcolstart, fillcolstop+1):
+            colladdr = fillcolletter.upper() + str(colcel)
+            if colladdr in store.keys():
+              print('WARNING - Overwriting element: ' + item)
+              print('  Original value: ' + store[item])
+              print('  New value: ' + datastore[item])
+              warnings = warnings + 1
+            store[colladdr] = fillcoldat
+          ext = getextent(store)
+          maxl = ext[0]
+          maxn = ext[1]
       else: 
  
 # If we've reached this stage, there is no rule for a line.
