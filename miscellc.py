@@ -355,6 +355,28 @@ def parse(filename):
           ext = getextent(store)
           maxl = ext[0]
           maxn = ext[1]
+      elif nocomments.strip().split()[0].lower() == 'fillrow:':
+        elements = shlex.split(nocomments.strip())
+        if len(elements) != 5:
+          print('ERROR - Wrong number of elements on fill row line ' + str(lineno) + ': ' + line.strip())
+          print('  Fill column line should be of the format fillrow: <number> <start> <finish> <data>')
+          fail = fail + 1
+        else:
+          fillrownum = int(elements[1])
+          fillrowstart = lettertonum(elements[2])
+          fillrowstop = lettertonum(elements[3])
+          fillrowdat = elements[4]
+          for rowcel in range(fillrowstart, fillrowstop+1):
+            rowaddr = numtoletter(rowcel) + str(fillrownum)
+            if rowaddr in store.keys():
+              print('WARNING - Overwriting element: ' + item)
+              print('  Original value: ' + store[item])
+              print('  New value: ' + datastore[item])
+              warnings = warnings + 1
+            store[rowaddr] = fillrowdat
+          ext = getextent(store)
+          maxl = ext[0]
+          maxn = ext[1]
       else: 
  
 # If we've reached this stage, there is no rule for a line.
